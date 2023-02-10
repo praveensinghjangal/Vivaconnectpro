@@ -1,12 +1,12 @@
-//const { json } = require('body-parser');
 const express = require('express');
 const app = express();
 app.use(express.json());
 var fs =  require('fs');
 var {parse} = require('csv-parse')
 var sendMessage = require('./src/sender')
+require('dotenv').config(); 
 
-const { default: mongoose } = require('mongoose');
+
 
 const multer = require('multer')
 
@@ -34,12 +34,6 @@ app.post("/image", (req, res) => {
   });
 });
 
-mongoose.connect("mongodb+srv://PraveenSinghJangal:Jangal77@cluster0.vgsmmgn.mongodb.net/MongoDB",{
-    useNewUrlParser :true
-})
-
-.then( () => console.log("MongoDb is Connected"))
-.catch( err => console.log(err))
 
 
 var arr = [];
@@ -81,7 +75,7 @@ function rnd(length) {
 }
 
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i <5; i++) {
   let demoObj = {};
   demoObj.Name = randStr(7);
   demoObj.Mobile = randNum(10);
@@ -113,13 +107,15 @@ csvWriter.writeRecords(records)       // returns a promise
 
 
 var parser = parse({ columns: true }, function (err, records) {
+
   sendMessage.connectQueue(records)
   // console.log(records);
+  
 });
 
 fs.createReadStream('/home/praveen/Assignment1/upload/assignment.csv').pipe(parser);
 
 
-app.listen(3001, () => {
-  console.log('Started on port 3001');
+app.listen(process.env.PORT, () => {
+  console.log('Started on port 3000');
 });
