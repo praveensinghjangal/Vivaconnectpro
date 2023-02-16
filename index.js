@@ -8,7 +8,8 @@ require('dotenv').config();
 
 
 
-const multer = require('multer')
+const multer = require('multer');
+const { log } = require('console');
 
 
 var storage = multer.diskStorage({
@@ -75,7 +76,7 @@ function rnd(length) {
 }
 
 
-for (let i = 0; i <5; i++) {
+for (let i = 0; i <15; i++) {
   let demoObj = {};
   demoObj.Name = randStr(7);
   demoObj.Mobile = randNum(10);
@@ -85,7 +86,7 @@ for (let i = 0; i <5; i++) {
 
 }
 
-
+//Convert Object/Array into csv file
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const csvWriter = createCsvWriter({
   path: './upload/assignment.csv',
@@ -101,15 +102,17 @@ const records = arr;
 csvWriter.writeRecords(records)       // returns a promise
   .then(() => {
     console.log('...Done');
-  });
+  }).catch((err) =>{ console.log(err);})
+  
+  
 
 
-
+//Used to parse the data from csv file into JSON
 
 var parser = parse({ columns: true }, function (err, records) {
 
   sendMessage.connectQueue(records)
-  // console.log(records);
+  console.log('............>',records);
   
 });
 
